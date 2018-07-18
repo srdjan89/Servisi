@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<!--
+    To change this license header, choose License Headers in Project Properties.
+    To change this template file, choose Tools | Templates
+    and open the template in the editor.
+-->
+<html>
+
+    <head>
+        <title>Компанија за превоз</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+    </head>
+
+    <body>
+        <script>
+
+            function dohvatiFirme() {
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        firme = (xmlHttp.responseXML).getElementsByTagName("firma");
+                        strFirme = "<table class=\"table table-striped table-hover\"><tr><th>Назив</th><th>Адреса</th></tr>";
+                        for (i = 0; i < firme.length; i++) {
+                            var naziv = firme[i].getElementsByTagName("naziv")[0].childNodes[0].nodeValue;
+                            var adresa = firme[i].getElementsByTagName("adresa")[0].childNodes[0].nodeValue;
+                            strFirme += "<tr><td>" + naziv + "</td><td>" + adresa + "</td></tr>";
+
+                        }
+                        strFirme += "</table>";
+                        document.getElementById("firme").innerHTML = strFirme;
+                    }
+                }
+                xmlHttp.open("GET", "http://localhost:8080/Servisi/api/firme/", true);
+                xmlHttp.send();
+            }
+
+            function pronadjiKamione() {
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        kamioni = (xmlHttp.responseXML).getElementsByTagName("kamion");
+                        strKamioni = "<table class=\"table table-striped table-hover\"><tr><th>Марка</th><th>Годиште</th></tr>";
+                        for (i = 0; i < kamioni.length; i++) {
+                            var marka = kamioni[i].getElementsByTagName("marka")[0].childNodes[0].nodeValue;
+                            var godiste = kamioni[i].getElementsByTagName("godiste")[0].childNodes[0].nodeValue;
+                            strKamioni += "<tr><td>" + marka + "</td><td>" + godiste + "</td></tr>";
+
+                        }
+                        strKamioni += "</table>";
+                        document.getElementById("kamioni2").innerHTML = strKamioni;
+                    }
+                }
+                var marka = document.getElementById("marka2").value;
+                xmlHttp.open("GET", "http://localhost:8080/Servisi/api/kamioni?marka=" + marka, true);
+                xmlHttp.send();
+            }
+
+            function dohvatiKamione() {
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        kamioni = (xmlHttp.responseXML).getElementsByTagName("kamion");
+                        strKamioni = "<table class=\"table table-striped table-hover\"><tr><th>Марка</th><th>Годиште</th><th>Носивост</th><th>Бр. Поправљања</th></tr>";
+                        for (i = 0; i < kamioni.length; i++) {
+                            var marka = kamioni[i].getElementsByTagName("marka")[0].childNodes[0].nodeValue;
+                            var godiste = kamioni[i].getElementsByTagName("godiste")[0].childNodes[0].nodeValue;
+                            var nosivost = kamioni[i].getElementsByTagName("nosivost")[0].childNodes[0].nodeValue;
+                            var brPopravljanja = kamioni[i].getElementsByTagName("brPopravljanja")[0].childNodes[0].nodeValue;
+                            strKamioni += "<tr><td>" + marka + "</td><td>" + godiste + "</td><td>" + nosivost + "</td><td>" + brPopravljanja + "</td></tr>";
+
+                        }
+                        strKamioni += "</table>";
+                        document.getElementById("kamioni").innerHTML = strKamioni;
+                    }
+                }
+                xmlHttp.open("GET", "http://localhost:8080/Servisi/api/kamioni/", true);
+                xmlHttp.send();
+            }
+
+            function dohvatiZaposlene() {
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        zaposleni = (xmlHttp.responseXML).getElementsByTagName("zaposlen");
+                        strZaposleni = "<table class=\"table table-striped\"><tr><th>Име</th><th>Стаж</th></tr>";
+                        for (i = 0; i < zaposleni.length; i++) {
+                            var ime = zaposleni[i].getElementsByTagName("ime")[0].childNodes[0].nodeValue;
+                            var staz = zaposleni[i].getElementsByTagName("staz")[0].childNodes[0].nodeValue;
+                            strZaposleni += "<tr><td>" + ime + "</td><td>" + staz + "</td></tr>";
+
+                        }
+                        strZaposleni += "</table>";
+                        document.getElementById("zaposleni").innerHTML = strZaposleni;
+                    }
+                }
+                var ime = document.getElementById("ime").value;
+                var vozac;
+                if (document.getElementById("vozac").checked)
+                    vozac = "true";
+                else
+                    vozac = "false";
+                var mehanicar;
+                if (document.getElementById("mehanicar").checked)
+                    mehanicar = "true";
+                else
+                    mehanicar = "false";
+                xmlHttp.open("GET", "http://localhost:8080/Servisi/api/zaposleni?ime=" +
+                        ime + "&vozac=" + vozac + "&mehanicar=" + mehanicar, true);
+                xmlHttp.send();
+            }
+        </script>
+        <div class="container-fluid">
+            <div class="row mt-3 ml-2">
+                <button type="button" class="btn btn-primary" onclick="dohvatiFirme()" style="width: 18rem;">Излистај фирме</button>
+            </div>
+            <div class="row mt-2 ml-2">
+                <div id="firme"></div>
+
+            </div>
+            <div class="row mt-2 ml-2">
+                <button type="button" class="btn btn-primary" onclick="dohvatiKamione()" style="width: 18rem;">Излистај камионе</button>
+            </div>
+            <div class="row mt-2 ml-2">
+                <div id="kamioni"></div>
+            </div>
+            <div class="row mt-2 ml-2">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        Име: <input type="text" name="ime" id="ime" class="form-control mt-2">
+
+
+                        <div class="form-group my-2">
+                            <div class="col-sm form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox" name="vozac" id="vozac">Возач<br></label></div>
+                            <div class="col-sm form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox" name="mehanicar" id="mehanicar">Механичар<br></label></div>
+                        </div>
+                        <div class="form-group my-2 text-center">
+                            <button onclick="dohvatiZaposlene()" class="btn btn-primary text-center">Пронађи</button>
+                        </div>
+                        <div id="zaposleni"></div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-2 ml-2">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        Марка камиона: <input type="text" name="marka2" id="marka2" class="form-control mt-2">
+                        <div class="form-group my-2 text-center">
+                            <button onclick="pronadjiKamione()" class="btn btn-primary text-center">Пронађи</button>
+                        </div>
+                        <div id="kamioni2"></div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-2 ml-2">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <form name="f1" method="post" action="http://localhost:8080/Servisi/api/zaposleni/promeni" target="_blank" >
+                            <div class="form-group">
+                                Име:
+                                <input type="text" name="ime" value="Dusan" class="form-control mt-2">
+                            </div>
+                            <div class="form-group">
+                                Стаж:
+                                <input class="form-control mt-2" type="number" name="staz" value="4" min="0">
+                            </div>
+                            <div class="form-group">
+                                ИД број:
+                                <input class="form-control mt-2" type="number" name="id" value="1" min="0">
+                            </div>
+                            <div class="form-group text-center">
+                                <input type="submit" class="btn btn-primary mt-2" value="Измени" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+        <!-- Popper JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    </body>
+
+</html>
